@@ -1,1 +1,0 @@
-# p-roboshop-terraform
