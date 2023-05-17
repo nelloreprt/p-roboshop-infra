@@ -1,5 +1,6 @@
 env = "dev"
 
+# the basis for this file creation is arguments of VPC and its components
 vpc = {
   main = {
     vpc_cidr_block       = "10.0.0.0/16"
@@ -59,3 +60,92 @@ vpc = {
     }
   }
 }
+
+# doc-db
+# use-case-1
+# currently for all the components we are using single_common database
+docdb = {
+  main = {
+    engine                  = "docdb"
+    backup_retention_period = 5
+    preferred_backup_window = "07:00-09:00"
+    skip_final_snapshot     = true
+
+    engine_version = "4.0.0"
+
+    count              = 2
+    instance_class     = "db.r5.large"
+  }
+}
+
+# use-case-2 (ignore)
+# suppose if projject_architecture requirement is that
+# component shall have docdb separately, user shall have docdb separately
+docdb = {
+  catalogue = {
+    engine                  = "docdb"
+    master_username         = "foo"
+    master_password         = "mustbeeightchars"
+    backup_retention_period = 5
+    preferred_backup_window = "07:00-09:00"
+  }
+
+  user = {
+    engine                  = "docdb"
+    master_username         = "foo"
+    master_password         = "mustbeeightchars"
+    backup_retention_period = 5
+    preferred_backup_window = "07:00-09:00"
+  }
+}
+
+# rds_database
+rds = {
+  main = {
+    engine                  = "aurora-mysql"
+    engine_version          = "5.7.mysql_aurora.2.03.2"
+    backup_retention_period = 5
+    preferred_backup_window = "07:00-09:00"
+    count              = 2
+    instance_class     = "db.r4.large"
+  }
+}
+
+# elasticache ()
+elasticache = {
+  main = {
+    engine               = "redis"
+    node_type            = "cache.m4.large"
+    num_cache_nodes      = 1
+    parameter_group_name = "default.redis3.2"
+    engine_version       = "3.2.10"
+    port                 = 6379
+  }
+}
+
+rabbitmq = {
+  main = {
+    instance_type = "t3.small"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

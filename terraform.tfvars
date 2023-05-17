@@ -10,5 +10,6 @@ tags = {
 
 # both default_vpc_id & route_table_id are common for both dev & prod environment,
 # all variables in terraform.tfvars will be automatically picked up by terraform
+# By default every VPC will have ONE route_table , we need to add ROUTE_entry in the route_table
 default_vpc_id = "vpc-049695961c2b3023a"
 default_route_table_id = "rtb-08fd5b2155fad8288"

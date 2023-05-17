@@ -4,3 +4,15 @@ variable "tags" {}
 
 variable "default_route_table_id" {}
 variable "default_vpc_id" {}
+
+# docdb------------------
+variable "docdb" {}
+
+# rds--------------
+variable "rds" {}
+
+# elasticache=redis
+variable "elasticache" {}
+
+# rabbitmq----------------------
+variable "rabbitmq" {}
