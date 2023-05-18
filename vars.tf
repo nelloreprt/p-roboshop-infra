@@ -16,3 +16,9 @@ variable "elasticache" {}
 
 # rabbitmq----------------------
 variable "rabbitmq" {}
+
+# alb--------------------------
+variable "alb" {}
+
+# app---------------------------
+variable "app" {}

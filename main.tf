@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "git::https://github.com/nelloreprt/p-tf-module-vpc.git"
+  source = /"git::https://github.com/nelloreprt/p-tf-module-vpc.git"
   env = var.env
   tags = var.tags
 
@@ -87,3 +87,49 @@ module "rabbitmq" {
 
   subnet_ids = local.db_subnet_ids
 }
+
+#------------------------------------------------------
+module "alb" {
+  source = "git::https://github.com/nelloreprt/p-tf-module-alb.git"
+  env = var.env
+  tags = var.tags
+
+  for_each = var.alb
+  name               = each.value["name"]
+  internal           = each.value["internal"]
+  load_balancer_type = each.value["load_balancer_type"]
+  enable_deletion_protection = each.value["enable_deletion_protection"]
+
+  # attaching private_subnet_ids to private_alb, attaching public_subnet_ids to public_alb
+  subnet_ids = local.alb_subnet_ids[each.value["subnet_name"]]
+}
+
+#------------------------------------------------------
+module "app" {
+  source = "git::https://github.com/nelloreprt/p-tf-module-app.git"
+  env = var.env
+  tags = var.tags
+
+  for_each = var.app
+  component = each.value["component"]
+  instance_type = each.value["instance_type"]
+  desired_capacity   = each.value["desired_capacity"]
+  max_size           = each.value["max_size"]
+  min_size           = each.value["min_size"]
+
+  # attaching private_subnet_ids to private_alb, attaching public_subnet_ids to public_alb
+  # without_lookup also it will work
+  subnet_ids = lookup(local.asg_subnet_ids, [each.value["subnet_name"]] ,null)
+
+}
+
+
+
+
+
+
+
+
+
+
+

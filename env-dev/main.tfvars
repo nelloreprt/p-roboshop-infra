@@ -129,8 +129,98 @@ rabbitmq = {
   }
 }
 
+# Application_Load_Balancer-----------------------
 
+alb = {
+  public = {
+    name               = "public_alb"
+    internal           = false
+    load_balancer_type = "application"
+    enable_deletion_protection = true
 
+    # attaching public_subnet_ids to public_alb
+    subnet_name = public
+  }
+
+  private = {
+    name               = "private_alb"
+    internal           = true
+    load_balancer_type = "application"
+    enable_deletion_protection = true
+
+    # attaching private_subnet_ids to private_alb
+    subnet_name = app
+  }
+}
+
+# app---------------------------------------
+app = {
+  catalogue = {
+    component = catalogue
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = app
+  }
+
+  cart = {
+    component = cart
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = app
+  }
+
+  user = {
+    component = user
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = app
+  }
+
+  shipping = {
+    component = shipping
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = app
+  }
+
+  payment = {
+    component = payment
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = app
+  }
+
+  frontend = {
+    component = frontend
+    instance_type = "t3.micro"
+    desired_capacity   = 2
+    max_size           = 6
+    min_size           = 2
+
+    # attaching private_subnet_ids to private_asg
+    subnet_name = web
+  }
+}
 
 
 
