@@ -24,5 +24,13 @@ locals {
     app = tolist([ "module.vpc["main"].private_subnet_id["app-az1"].id" , "module.vpc["main"].private_subnet_id["app-az2"].id" ])
     web = tolist([ "module.vpc["main"].private_subnet_id["web-az1"].id" , "module.vpc["main"].private_subnet_id["web-az2"].id" ])
   }
+
+  cidr_blocks = {
+    public = tolist([ "module.vpc["main"].public_subnet_id["public-az1"].cidr_block" , "module.vpc["main"].public_subnet_id["public-az2"].cidr_block" ])
+    app =  tolist([ "module.vpc["main"].private_subnet_id["app-az1"].cidr_block" , "module.vpc["main"].private_subnet_id["app-az2"].cidr_block" ])
+    db =  tolist([ "module.vpc["main"].private_subnet_id["db-az1"].cidr_block" , "module.vpc["main"].private_subnet_id["db-az2"].cidr_block" ])
+    web =  tolist([ "module.vpc["main"].private_subnet_id["web-az1"].cidr_block" , "module.vpc["main"].private_subnet_id["web-az2"].cidr_block" ])
+
+  }
 }
 

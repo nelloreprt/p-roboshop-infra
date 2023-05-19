@@ -1,5 +1,11 @@
 env = "dev"
 
+bastion_cidr = ["172.168.0.1/32"]
+# 172.168.0.1 >> this is the pvt_ip address of workstation/bastion
+# we are adding /32 >> meaning >> one single_ip
+# /24 >> 256 ips
+# /16 >> 65,000 ips
+
 # the basis for this file creation is arguments of VPC and its components
 vpc = {
   main = {
@@ -164,6 +170,15 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = app
+
+    # we are opening within the app only
+    # and we are allowing other components in (app)Private_subnets to access catalogue
+    # so we are opening port 8080 in catalogue
+    port = 8080
+
+    # we are allowing catalogue to Private_subnet
+    # (app)Private_subnets shall be in a position to access catalogue
+    cidr_block = app
   }
 
   cart = {
@@ -175,6 +190,15 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = app
+
+    # we are opening within the app only
+    # and we are allowing other components in (app)Private_subnets to access cart
+    # so we are opening port 8080 in cart
+    port = 8080
+
+    # we are allowing cart to Private_subnet
+    # (app)Private_subnets shall be in a position to access cart
+    cidr_block = app
   }
 
   user = {
@@ -186,6 +210,15 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = app
+
+    # we are opening within the app only
+    # and we are allowing other components in (app)Private_subnets to access user
+    # so we are opening port 8080 in user
+    port = 8080
+
+    # we are allowing user to Private_subnet
+    # (app)Private_subnets shall be in a position to access user
+    cidr_block = app
   }
 
   shipping = {
@@ -197,6 +230,15 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = app
+
+    # we are opening within the app only
+    # and we are allowing other components in (app)Private_subnets to access shipping
+    # so we are opening port 8080 in shipping
+    port = 8080
+
+    # we are allowing shipping to Private_subnet
+    # (app)Private_subnets shall be in a position to access shipping
+    cidr_block = app
   }
 
   payment = {
@@ -208,6 +250,15 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = app
+
+    # we are opening within the app only
+    # and we are allowing other components in (app)Private_subnets to access payment
+    # so we are opening port 8080 in Payment
+    port = 8080
+
+    # we are allowing Payment to Private_subnet
+    # (app)Private_subnets shall be in a position to access payment
+    cidr_block = app
   }
 
   frontend = {
@@ -219,6 +270,14 @@ app = {
 
     # attaching private_subnet_ids to private_asg
     subnet_name = web
+
+
+    # so we are opening port 80 in frontend
+    port = 80
+
+    # we are allowing frontend to Public_subnet
+    # public_subnets shall be in a position to access frontend
+    cidr_block = public  # public_subnet should access the frontend
   }
 }
 

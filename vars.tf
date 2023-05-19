@@ -22,3 +22,6 @@ variable "alb" {}
 
 # app---------------------------
 variable "app" {}
+
+# bastion_cidr------------------
+variable "bastion_cidr" {}

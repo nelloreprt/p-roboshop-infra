@@ -119,11 +119,20 @@ module "app" {
 
   # attaching private_subnet_ids to private_alb, attaching public_subnet_ids to public_alb
   # without_lookup also it will work
-  subnet_ids = lookup(local.asg_subnet_ids, [each.value["subnet_name"]] ,null)
+  subnet_ids = lookup(local.asg_subnet_ids, [each.value["subnet_name"]] , null)
 
+  vpc_id = module.vpc["main"].vpc_id
+
+  bastion_cidr = var.bastion_cidr
+
+  port = each.value["port"]
+  cidr_block = lookup(local.cidr_block,  [each.value["cidr_block"]] , null)
 }
 
-
+# for vpc_id
+output "vpc_id" {
+value = "module.vpc"
+}
 
 
 
