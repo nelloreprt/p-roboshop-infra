@@ -102,6 +102,11 @@ module "alb" {
 
   # attaching private_subnet_ids to private_alb, attaching public_subnet_ids to public_alb
   subnet_ids = local.alb_subnet_ids[each.value["subnet_name"]]
+
+  # for LB (security_group)
+  vpc_id = module.vpc["main"].vpc_id
+
+  cidr_block = each.value["cidr_block"]
 }
 
 #------------------------------------------------------
@@ -127,12 +132,35 @@ module "app" {
 
   port = each.value["port"]
   cidr_block = lookup(local.cidr_block,  [each.value["cidr_block"]] , null)
+
+  dns_domain = var.dns_domain
+
+  # fetched with output_block_alb # for every map >> one lookup is added
+  alb_records = lookup(lookup(lookup(module.alb, each.value["alb_records"], null) "alb" , null) "dns_name" , null)
+  # hint: 1st lookup >> public/private, null
+  #       2nd lookup >> alb, null
+  #       3rd lookup >> dns_name, null
+
+  listener_arn = lookup(lookup(lookup(module.listener_arn, each.value["alb_records"] , null) "listner" ,null) "arn" , null )
+  listener_priority = each.value["listener_priority"]
 }
 
 # for vpc_id
 output "vpc_id" {
 value = "module.vpc"
 }
+
+# value for >> " alb_dns_domain " >> is formulated using
+output "alb" {
+value = "module.alb"
+}
+
+# for listener_arn >> is formulated using
+output "listener_arn" {
+value = "module.alb.listener"
+}
+
+
 
 
 

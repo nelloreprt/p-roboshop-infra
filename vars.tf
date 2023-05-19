@@ -25,3 +25,6 @@ variable "app" {}
 
 # bastion_cidr------------------
 variable "bastion_cidr" {}
+
+# dns_domain for CNAME
+variable "dns_domain" {}

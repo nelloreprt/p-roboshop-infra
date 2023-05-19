@@ -1,5 +1,7 @@
 env = "dev"
 
+dns_domain = "nellore.online"
+
 bastion_cidr = ["172.168.0.1/32"]
 # 172.168.0.1 >> this is the pvt_ip address of workstation/bastion
 # we are adding /32 >> meaning >> one single_ip
@@ -146,6 +148,9 @@ alb = {
 
     # attaching public_subnet_ids to public_alb
     subnet_name = public
+
+    # we are allowing outside world to access Public_Load_balancer
+    cidr_block = [ "0.0.0.0/0"]
   }
 
   private = {
@@ -156,6 +161,9 @@ alb = {
 
     # attaching private_subnet_ids to private_alb
     subnet_name = app
+
+    LB in app_subnet will be accessed by [app_subnets + web_subnets]
+    cidr_block = [ "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24", "10.0.5.0/24"]
   }
 }
 
@@ -179,6 +187,12 @@ app = {
     # we are allowing catalogue to Private_subnet
     # (app)Private_subnets shall be in a position to access catalogue
     cidr_block = app
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = private
+
+    listener_priority = 10
   }
 
   cart = {
@@ -199,6 +213,12 @@ app = {
     # we are allowing cart to Private_subnet
     # (app)Private_subnets shall be in a position to access cart
     cidr_block = app
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = private
+
+    listener_priority = 11
   }
 
   user = {
@@ -219,6 +239,12 @@ app = {
     # we are allowing user to Private_subnet
     # (app)Private_subnets shall be in a position to access user
     cidr_block = app
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = private
+
+    listener_priority = 12
   }
 
   shipping = {
@@ -239,6 +265,12 @@ app = {
     # we are allowing shipping to Private_subnet
     # (app)Private_subnets shall be in a position to access shipping
     cidr_block = app
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = private
+
+    listener_priority = 13
   }
 
   payment = {
@@ -259,6 +291,12 @@ app = {
     # we are allowing Payment to Private_subnet
     # (app)Private_subnets shall be in a position to access payment
     cidr_block = app
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = private
+
+    listener_priority = 14
   }
 
   frontend = {
@@ -278,6 +316,12 @@ app = {
     # we are allowing frontend to Public_subnet
     # public_subnets shall be in a position to access frontend
     cidr_block = public  # public_subnet should access the frontend
+
+    #    I.e Load_Balancer name we will give in C_Name reord
+    #    using CNAME of Route53 >> cname = name to name
+    alb_records = public
+
+    listener_priority = 10
   }
 }
 
