@@ -83,6 +83,9 @@ docdb = {
 
     count              = 2
     instance_class     = "db.r5.large"
+
+    components in app_subnet will access the docdb
+    subnet_name = "app"   # cidr_block not subnet_id
   }
 }
 
@@ -116,6 +119,9 @@ rds = {
     preferred_backup_window = "07:00-09:00"
     count              = 2
     instance_class     = "db.r4.large"
+
+    components in app_subnet will access the RDS
+    subnet_name = "app"   # cidr_block not subnet_id
   }
 }
 
@@ -128,12 +134,18 @@ elasticache = {
     parameter_group_name = "default.redis3.2"
     engine_version       = "3.2.10"
     port                 = 6379
+
+    components in app_subnet will access the ELASTICACHE
+    subnet_name = "app"   # cidr_block not subnet_id
   }
 }
 
 rabbitmq = {
   main = {
     instance_type = "t3.small"
+
+    components in app_subnet will access the RABBITMQ
+    subnet_name = "app"   # cidr_block not subnet_id
   }
 }
 
@@ -193,6 +205,8 @@ app = {
     alb_records = private
 
     listener_priority = 10
+
+    parameters = [ "docdb" ]  # this information will be known from project by checking each and every component
   }
 
   cart = {
@@ -219,6 +233,8 @@ app = {
     alb_records = private
 
     listener_priority = 11
+    parameters = [ "elasticache" ]  # this information will be known from project by checking each and every component
+
   }
 
   user = {
@@ -245,6 +261,8 @@ app = {
     alb_records = private
 
     listener_priority = 12
+    parameters = [ "docdb" , "elasticache" ]  # this information will be known from project by checking each and every component
+
   }
 
   shipping = {
@@ -271,6 +289,8 @@ app = {
     alb_records = private
 
     listener_priority = 13
+    parameters = [ "rds"  ]  # this information will be known from project by checking each and every component
+
   }
 
   payment = {
@@ -297,6 +317,8 @@ app = {
     alb_records = private
 
     listener_priority = 14
+    parameters = [ ]  # this information will be known from project by checking each and every component
+
   }
 
   frontend = {
@@ -322,6 +344,9 @@ app = {
     alb_records = public
 
     listener_priority = 10
+
+    parameters = [ ]  # this information will be known from project by checking each and every component
+
   }
 }
 

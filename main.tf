@@ -34,6 +34,11 @@ module "docdb" {
 
   count = each.value["count"]
   instance_class = each.value["instance_class"]
+
+  # for docdb (security_group)
+  vpc_id = module.vpc["main"].vpc_id
+
+  cidr_block = local.cidr_blocks[each.value["subnet_name"]]
 }
 
 # for doc_db
@@ -57,6 +62,11 @@ module "rds" {
 
   count = each.value["count"]
   instance_class = each.value["instance_class"]
+
+  # for elasticache (security_group)
+  vpc_id = module.vpc["main"].vpc_id
+
+  cidr_block = local.cidr_blocks[each.value["subnet_name"]]
 }
 
 #------------------------------------------------------
@@ -74,6 +84,16 @@ module "elasticache" {
   port                 = each.value["port"]
 
   subnet_ids = local.db_subnet_ids
+
+  # for elasticache (security_group)
+  vpc_id = module.vpc["main"].vpc_id
+
+  cidr_block = local.cidr_blocks[each.value["subnet_name"]]
+}
+
+# for endpoint_elasticache
+output "elasticache-endpoint" {
+value = "module.elasticache"
 }
 
 #------------------------------------------------------
@@ -86,6 +106,14 @@ module "rabbitmq" {
   instance_type = each.value["instance_type"]
 
   subnet_ids = local.db_subnet_ids
+
+  # for rabbitmq (security_group)
+  vpc_id = module.vpc["main"].vpc_id
+
+  cidr_block = local.cidr_blocks[each.value["subnet_name"]]
+
+  bastion_cidr = var.bastion_cidr
+  dns_domain = var.dns_domain
 }
 
 #------------------------------------------------------
@@ -143,6 +171,11 @@ module "app" {
 
   listener_arn = lookup(lookup(lookup(module.listener_arn, each.value["alb_records"] , null) "listner" ,null) "arn" , null )
   listener_priority = each.value["listener_priority"]
+
+  parameters = each.value["parameters"]
+
+  depends_on : [module.docdb, module.elasticache, module.rabbitmq, module.rds, module.alb]
+  # we are making database to get created first, only after which app.module will get created
 }
 
 # for vpc_id
